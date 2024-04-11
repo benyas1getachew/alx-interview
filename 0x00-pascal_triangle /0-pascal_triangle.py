@@ -1,5 +1,9 @@
 #!/usr/bin/python3
+"""Pascal's Triangle Interview Challenge"""
+
+
 def pascal_triangle(n):
+    """Returns a list of lists containing each row of the pascal's triangle"""
     if n <= 0:
         return []
 
