@@ -1,39 +1,46 @@
 #!/usr/bin/python3
-"""stats module
-"""
-from sys import stdin
 
+import sys
 
-codes = {'200': 0, '301': 0, '400': 0, '401': 0,
-         '403': 0, '404': 0, '405': 0, '500': 0}
-size = 0
-
-
-def print_info():
-    """print_info method print needed info
-
-    Args:
-        codes (dict): code status
-        size (int): size of files
+def print_msg(dicts, total_file_size):
     """
-    print("File size: {}".format(size))
-    for key, val in sorted(codes.items()):
-        if val > 0:
+    Method to print
+    Args:
+        dicts: dict of status codes
+        total_file_size: total of the file
+    Returns:
+        Nothing
+    """
+
+    print("File size: {}".format(total_file_size))
+    for key, val in sorted(dicts.items()):
+        if val != 0:
             print("{}: {}".format(key, val))
 
-if __name__ == '__main__':
-    try:
-        for i, line in enumerate(stdin, 1):
-            try:
-                info = line.split()
-                size += int(info[-1])
-                if info[-2] in codes.keys():
-                    codes[info[-2]] += 1
-            except:
-                pass
-            if not i % 10:
-                print_info()
-    except KeyboardInterrupt:
-        print_info()
-        raise
-    print_info()
+total_file_size = 0
+code = 0
+counter = 0
+dicts = {"200": 0,"301": 0,"400": 0,"401": 0,
+           "403": 0,"404": 0,"405": 0,"500": 0}
+
+try:
+    for line in sys.stdin:
+        parsed_line = line.split()  # ✄ trimming
+        parsed_line = parsed_line[::-1]  # inverting
+
+        if len(parsed_line) > 2:
+            counter += 1
+
+            if counter <= 10:
+                total_file_size += int(parsed_line[0])  # file size
+                code = parsed_line[1]  # status code
+
+                if (code in dicts.keys()):
+                    dicts[code] += 1
+
+            if (counter == 10):
+                print_msg(dicts, total_file_size)
+                counter = 0
+
+finally:
+    print_msg(dicts, total_file_size)
