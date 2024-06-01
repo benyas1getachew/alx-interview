@@ -26,10 +26,8 @@ request(apiUrl, async (error, response, body) => {
   const characters = filmData.characters;
 
   try {
-    for (const characterUrl of characters) {
-      const characterName = await fetchCharacterName(characterUrl);
-      console.log(characterName);
-    }
+    const characterNames = await Promise.all(characters.map(fetchCharacterName));
+    characterNames.forEach(name => console.log(name));
   } catch (error) {
     console.error(error);
   }
